@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Norsk — Learn Norwegian</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf7f2;
+  --cream-dark: #f0ebe0;
+  --paper: #fff9f0;
+  --fjord: #3a7bd5;
+  --fjord-light: #e8f0fb;
+  --fjord-dark: #2a5ba8;
+  --sage: #5a9e6f;
+  --sage-light: #e6f4eb;
+  --sage-dark: #3d7a50;
+  --sun: #f5a623;
+  --sun-light: #fff3de;
+  --sun-dark: #d4881a;
+  --rose: #e05c7a;
+  --rose-light: #fde8ed;
+  --lavender: #7c6fe0;
+  --lavender-light: #eeecfb;
+  --text: #2c2a26;
+  --text-mid: #6b6460;
+  --text-dim: #a09890;
+  --border: #e5dfd4;
+  --border-strong: #d0c8bc;
+  --correct: #4caf76;
+  --correct-bg: #e8f7ee;
+  --wrong: #e05c5c;
+  --wrong-bg: #fdeaea;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --font: 'Nunito', sans-serif;
+  --font-body: 'Nunito Sans', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--font);
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle Scandinavian pattern bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 20%, rgba(58,123,213,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(90,158,111,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#app { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 16px 16px 80px; }
+
+/* ── HEADER ── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 20px;
+}
+.app-logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--fjord);
+  letter-spacing: -0.02em;
+}
+.app-logo span { color: var(--sage); }
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--sun-light);
+  border: 1.5px solid #f5c86a;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--sun-dark);
+}
+.streak-flame { font-size: 1rem; }
+
+/* ── SCREENS ── */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp 0.3s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HOME SCREEN ── */
+.home-hero {
+  background: linear-gradient(135deg, #3a7bd5 0%, #5b9ee8 100%);
+  border-radius: var(--radius-xl);
+  padding: 32px 28px;
+  color: white;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.home-hero::after {
+  content: '🇳🇴';
+  position: absolute;
+  right: 20px; bottom: 12px;
+  font-size: 3.5rem;
+  opacity: 0.25;
+}
+.hero-title { font-size: 1.7rem; font-weight: 900; margin-bottom: 6px; }
+.hero-sub { font-size: 0.95rem; opacity: 0.85; font-weight: 600; }
+
+.section-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.mode-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  box-shadow: var(--shadow-sm);
+}
+.mode-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--fjord); }
+.mode-card:active { transform: scale(0.97); }
+.mode-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+.mode-name { font-size: 0.95rem; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+.mode-desc { font-size: 0.78rem; color: var(--text-mid); font-weight: 600; line-height: 1.35; }
+
+.cat-section { margin-bottom: 28px; }
+.cat-scroll { display: flex; gap: 10px; flex-wrap: wrap; }
+.cat-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 30px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+.cat-chip:hover { border-color: var(--fjord); background: var(--fjord-light); color: var(--fjord-dark); }
+.cat-chip.active { border-color: var(--fjord); background: var(--fjord); color: white; }
+.cat-chip-emoji { font-size: 1rem; }
+
+/* ── GAME SCREEN ── */
+.game-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.back-btn {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.back-btn:hover { border-color: var(--fjord); }
+.progress-track {
+  flex: 1;
+  background: var(--cream-dark);
+  border-radius: 8px;
+  height: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--fjord), var(--fjord-light));
+  border-radius: 8px;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* Question card */
+.q-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.q-mode-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  background: var(--cream-dark);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 4px;
+}
+.q-emoji { font-size: 4rem; line-height: 1; }
+.q-emoji-row { display: flex; gap: 8px; align-items: center; font-size: 3.2rem; }
+.q-emoji-plus { font-size: 1.4rem; color: var(--text-dim); }
+.q-word {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.q-sub {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  font-weight: 600;
+}
+.q-article {
+  font-size: 0.8rem;
+  color: var(--fjord);
+  font-weight: 700;
+  background: var(--fjord-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* Answer options */
+.options-grid {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.options-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.options-grid.cols-1 { grid-template-columns: 1fr; }
+
+.opt-btn {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 60px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--fjord); background: var(--fjord-light); transform: translateY(-1px); }
+.opt-btn:active:not(:disabled) { transform: scale(0.97); }
+.opt-btn.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--sage-dark); }
+.opt-btn.wrong { border-color: var(--wrong); background: var(--wrong-bg); color: var(--wrong); }
+.opt-btn:disabled { cursor: default; }
+.opt-emoji { font-size: 1.5rem; }
+.opt-text { font-size: 1rem; font-weight: 800; }
+.opt-sub { font-size: 0.78rem; color: var(--text-mid); font-weight: 600; }
+
+/* Feedback panel */
+.feedback-panel {
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  display: none;
+  animation: popIn 0.2s ease;
+}
+.feedback-panel.show { display: flex; align-items: flex-start; gap: 12px; }
+.feedback-panel.correct-fb { background: var(--correct-bg); border: 1.5px solid #a8e6be; }
+.feedback-panel.wrong-fb { background: var(--wrong-bg); border: 1.5px solid #f5b8b8; }
+.fb-icon { font-size: 1.5rem; flex-shrink: 0; }
+.fb-body { flex: 1; }
+.fb-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 2px; }
+.fb-title.correct-fb { color: var(--sage-dark); }
+.fb-title.wrong-fb { color: var(--wrong); }
+.fb-detail { font-size: 0.83rem; font-weight: 600; color: var(--text-mid); }
+.fb-example { font-size: 0.83rem; font-weight: 600; color: var(--fjord); margin-top: 3px; font-style: italic; }
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Next button */
+.next-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: var(--fjord);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(58,123,213,0.3);
+  display: none;
+}
+.next-btn:hover { background: var(--fjord-dark); transform: translateY(-1px); }
+.next-btn.show { display: block; animation: fadeUp 0.2s ease; }
+
+/* ── MATCH GAME ── */
+.match-intro {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin-bottom: 16px;
+  background: var(--cream-dark);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+.match-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.match-card {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+.match-card:hover:not(.disabled) { border-color: var(--fjord); background: var(--fjord-light); }
+.match-card.selected { border-color: var(--fjord); background: var(--fjord-light); transform: scale(1.02); }
+.match-card.matched { border-color: var(--correct); background: var(--correct-bg); opacity: 0.7; color: var(--sage-dark); pointer-events: none; }
+.match-card.wrong-flash { border-color: var(--wrong); background: var(--wrong-bg); animation: shake 0.3s ease; }
+.match-card.disabled { pointer-events: none; }
+.match-card .mc-emoji { font-size: 1.6rem; }
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ── SENTENCE BUILDER ── */
+.sentence-clue {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.clue-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 10px; }
+.clue-emojis { font-size: 2.8rem; }
+.clue-hint { font-size: 0.82rem; color: var(--text-mid); font-weight: 600; margin-top: 8px; }
+
+.sentence-drop {
+  background: var(--cream-dark);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  min-height: 64px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.sentence-drop.has-words { border-color: var(--fjord); border-style: solid; background: var(--fjord-light); }
+.drop-placeholder { color: var(--text-dim); font-size: 0.85rem; font-weight: 600; }
+
+.tile-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.word-tile {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+.word-tile:hover { border-color: var(--fjord); background: var(--fjord-light); transform: translateY(-1px); }
+.word-tile.in-drop { background: var(--fjord); border-color: var(--fjord-dark); color: white; }
+.word-tile.correct-tile { background: var(--correct-bg); border-color: var(--correct); color: var(--sage-dark); }
+.word-tile.wrong-tile { background: var(--wrong-bg); border-color: var(--wrong); color: var(--wrong); }
+
+.check-btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background: var(--sage);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(90,158,111,0.3);
+  margin-bottom: 10px;
+}
+.check-btn:hover { background: var(--sage-dark); }
+.check-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* ── RESULTS SCREEN ── */
+.results-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 20px;
+}
+.result-emoji { font-size: 4rem; margin-bottom: 12px; display: block; }
+.result-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 8px; color: var(--text); }
+.result-sub { font-size: 1rem; color: var(--text-mid); font-weight: 600; margin-bottom: 24px; }
+.result-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.stat-box {
+  background: var(--cream-dark);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.stat-num { font-size: 2rem; font-weight: 900; color: var(--fjord); }
+.stat-label { font-size: 0.78rem; font-weight: 800; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+
+.action-btns { display: flex; flex-direction: column; gap: 10px; }
+.primary-btn {
+  padding: 15px;
+  background: var(--fjord);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(58,123,213,0.3);
+}
+.primary-btn:hover { background: var(--fjord-dark); }
+.secondary-btn {
+  padding: 14px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-mid);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.secondary-btn:hover { border-color: var(--fjord); color: var(--fjord); }
+
+/* Mode selector tabs */
+.mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.mode-tab {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  color: var(--text-mid);
+}
+.mode-tab:hover { border-color: var(--fjord); color: var(--fjord-dark); }
+.mode-tab.active { background: var(--fjord); border-color: var(--fjord); color: white; }
+
+/* Score display */
+.score-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.score-item {
+  text-align: center;
+}
+.score-num { font-size: 1.4rem; font-weight: 900; }
+.score-num.correct-c { color: var(--correct); }
+.score-num.wrong-c { color: var(--wrong); }
+.score-lbl { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Category header in game */
+.game-cat-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin-bottom: 14px;
+}
+.cat-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fjord); }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="app-header">
+    <div class="app-logo">norsk<span>.</span></div>
+    <div class="streak-badge"><span class="streak-flame">🔥</span><span id="streakCount">0</span> streak</div>
+  </div>
+
+  <!-- HOME -->
+  <div id="screenHome" class="screen active">
+    <div class="home-hero">
+      <div class="hero-title">Learn Norwegian 🇳🇴</div>
+      <div class="hero-sub">Emojis + words = easy beginner learning</div>
+    </div>
+
+    <div class="section-title">Pick a Mode</div>
+    <div class="mode-grid">
+      <div class="mode-card" onclick="startMode('emojiToWord')">
+        <span class="mode-icon">😊→🇳🇴</span>
+        <div class="mode-name">Emoji Quiz</div>
+        <div class="mode-desc">See an emoji, pick the Norwegian word</div>
+      </div>
+      <div class="mode-card" onclick="startMode('wordToEmoji')">
+        <span class="mode-icon">🇳🇴→😊</span>
+        <div class="mode-name">Word Quiz</div>
+        <div class="mode-desc">See a Norwegian word, pick the emoji</div>
+      </div>
+      <div class="mode-card" onclick="startMode('match')">
+        <span class="mode-icon">🃏🃏</span>
+        <div class="mode-name">Pair Match</div>
+        <div class="mode-desc">Match emojis to their Norwegian words</div>
+      </div>
+      <div class="mode-card" onclick="startMode('sentence')">
+        <span class="mode-icon">🧩✍️</span>
+        <div class="mode-name">Build It</div>
+        <div class="mode-desc">Arrange tiles to build a sentence</div>
+      </div>
+    </div>
+
+    <div class="cat-section">
+      <div class="section-title">Practice a Category</div>
+      <div class="cat-scroll" id="catChips"></div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="screenGame" class="screen">
+    <div class="game-top">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 0</div>
+    </div>
+
+    <div class="score-row">
+      <div class="score-item">
+        <div class="score-num correct-c" id="scoreCorrect">0</div>
+        <div class="score-lbl">Correct</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num wrong-c" id="scoreWrong">0</div>
+        <div class="score-lbl">Wrong</div>
+      </div>
+    </div>
+
+    <div id="gameArea"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="screenResults" class="screen">
+    <div class="results-card" id="resultsCard"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const VOCAB = [
+  // ANIMALS
+  { emoji:'🐶', en:'dog', no:'hund', art:'en', cat:'animals', phrase:'Hunden løper.', phrase_en:'The dog is running.' },
+  { emoji:'🐱', en:'cat', no:'katt', art:'en', cat:'animals', phrase:'Katten sover.', phrase_en:'The cat is sleeping.' },
+  { emoji:'🐦', en:'bird', no:'fugl', art:'en', cat:'animals', phrase:'Fuglen flyr.', phrase_en:'The bird is flying.' },
+  { emoji:'🐟', en:'fish', no:'fisk', art:'en', cat:'animals', phrase:'Fisken svømmer.', phrase_en:'The fish is swimming.' },
+  { emoji:'🐴', en:'horse', no:'hest', art:'en', cat:'animals', phrase:'Hesten er stor.', phrase_en:'The horse is big.' },
+  { emoji:'🐮', en:'cow', no:'ku', art:'ei', cat:'animals', phrase:'Kua er på gården.', phrase_en:'The cow is on the farm.' },
+  { emoji:'🐑', en:'sheep', no:'sau', art:'en', cat:'animals', phrase:'Sauen er hvit.', phrase_en:'The sheep is white.' },
+  { emoji:'🐧', en:'penguin', no:'pingvin', art:'en', cat:'animals', phrase:'Pingvinen er søt.', phrase_en:'The penguin is cute.' },
+  { emoji:'🦊', en:'fox', no:'rev', art:'en', cat:'animals', phrase:'Reven er rask.', phrase_en:'The fox is fast.' },
+  { emoji:'🐺', en:'wolf', no:'ulv', art:'en', cat:'animals', phrase:'Ulven er i skogen.', phrase_en:'The wolf is in the forest.' },
+
+  // FOOD
+  { emoji:'🍎', en:'apple', no:'eple', art:'et', cat:'food', phrase:'Eplet er rødt.', phrase_en:'The apple is red.' },
+  { emoji:'🍞', en:'bread', no:'brød', art:'et', cat:'food', phrase:'Brødet er ferskt.', phrase_en:'The bread is fresh.' },
+  { emoji:'🧀', en:'cheese', no:'ost', art:'en', cat:'food', phrase:'Osten er god.', phrase_en:'The cheese is good.' },
+  { emoji:'🐟', en:'fish', no:'fisk', art:'en', cat:'food', phrase:'Fisken smaker godt.', phrase_en:'The fish tastes good.' },
+  { emoji:'🥛', en:'milk', no:'melk', art:'ei', cat:'food', phrase:'Melken er kald.', phrase_en:'The milk is cold.' },
+  { emoji:'☕', en:'coffee', no:'kaffe', art:'en', cat:'food', phrase:'Kaffen er varm.', phrase_en:'The coffee is hot.' },
+  { emoji:'🧁', en:'cake', no:'kake', art:'ei', cat:'food', phrase:'Kaken er søt.', phrase_en:'The cake is sweet.' },
+  { emoji:'🍳', en:'egg', no:'egg', art:'et', cat:'food', phrase:'Egget er kokt.', phrase_en:'The egg is boiled.' },
+  { emoji:'🫐', en:'berry', no:'bær', art:'et', cat:'food', phrase:'Bærene er blå.', phrase_en:'The berries are blue.' },
+  { emoji:'🥕', en:'carrot', no:'gulrot', art:'ei', cat:'food', phrase:'Gulroten er oransje.', phrase_en:'The carrot is orange.' },
+
+  // HOME
+  { emoji:'🏠', en:'house', no:'hus', art:'et', cat:'home', phrase:'Huset er stort.', phrase_en:'The house is big.' },
+  { emoji:'🛏️', en:'bed', no:'seng', art:'ei', cat:'home', phrase:'Senga er myk.', phrase_en:'The bed is soft.' },
+  { emoji:'🪑', en:'chair', no:'stol', art:'en', cat:'home', phrase:'Stolen er hard.', phrase_en:'The chair is hard.' },
+  { emoji:'🚿', en:'shower', no:'dusj', art:'en', cat:'home', phrase:'Dusjen er varm.', phrase_en:'The shower is warm.' },
+  { emoji:'🚪', en:'door', no:'dør', art:'ei', cat:'home', phrase:'Døren er åpen.', phrase_en:'The door is open.' },
+  { emoji:'🪟', en:'window', no:'vindu', art:'et', cat:'home', phrase:'Vinduet er stort.', phrase_en:'The window is big.' },
+  { emoji:'💡', en:'lamp', no:'lampe', art:'ei', cat:'home', phrase:'Lampen lyser.', phrase_en:'The lamp is shining.' },
+  { emoji:'📺', en:'TV', no:'TV', art:'en', cat:'home', phrase:'TVen er på.', phrase_en:'The TV is on.' },
+  { emoji:'🛁', en:'bathtub', no:'badekar', art:'et', cat:'home', phrase:'Badekaret er fullt.', phrase_en:'The bathtub is full.' },
+  { emoji:'🔑', en:'key', no:'nøkkel', art:'en', cat:'home', phrase:'Nøkkelen er borte.', phrase_en:'The key is missing.' },
+
+  // FAMILY
+  { emoji:'👩', en:'woman/mother', no:'mor', art:'ei', cat:'family', phrase:'Mor lager mat.', phrase_en:'Mom is making food.' },
+  { emoji:'👨', en:'man/father', no:'far', art:'en', cat:'family', phrase:'Far er glad.', phrase_en:'Dad is happy.' },
+  { emoji:'👧', en:'girl/daughter', no:'datter', art:'ei', cat:'family', phrase:'Datteren er ung.', phrase_en:'The daughter is young.' },
+  { emoji:'👦', en:'boy/son', no:'sønn', art:'en', cat:'family', phrase:'Sønnen er liten.', phrase_en:'The son is small.' },
+  { emoji:'👴', en:'grandfather', no:'bestefar', art:'en', cat:'family', phrase:'Bestefar er gammel.', phrase_en:'Grandfather is old.' },
+  { emoji:'👵', en:'grandmother', no:'bestemor', art:'ei', cat:'family', phrase:'Bestemor baker kake.', phrase_en:'Grandmother bakes cake.' },
+  { emoji:'👫', en:'couple', no:'par', art:'et', cat:'family', phrase:'Paret er happy.', phrase_en:'The couple is happy.' },
+  { emoji:'👶', en:'baby', no:'baby', art:'en', cat:'family', phrase:'Babyen sover.', phrase_en:'The baby is sleeping.' },
+  { emoji:'🧑', en:'person', no:'person', art:'en', cat:'family', phrase:'Personen er snill.', phrase_en:'The person is kind.' },
+  { emoji:'👱', en:'friend', no:'venn', art:'en', cat:'family', phrase:'Vennen er god.', phrase_en:'The friend is kind.' },
+
+  // BODY
+  { emoji:'👁️', en:'eye', no:'øye', art:'et', cat:'body', phrase:'Øyet er blått.', phrase_en:'The eye is blue.' },
+  { emoji:'👂', en:'ear', no:'øre', art:'et', cat:'body', phrase:'Øret er lite.', phrase_en:'The ear is small.' },
+  { emoji:'👃', en:'nose', no:'nese', art:'ei', cat:'body', phrase:'Nesen er rød.', phrase_en:'The nose is red.' },
+  { emoji:'👄', en:'mouth', no:'munn', art:'en', cat:'body', phrase:'Munnen er åpen.', phrase_en:'The mouth is open.' },
+  { emoji:'✋', en:'hand', no:'hånd', art:'ei', cat:'body', phrase:'Hånden er stor.', phrase_en:'The hand is big.' },
+  { emoji:'🦶', en:'foot', no:'fot', art:'en', cat:'body', phrase:'Foten er kald.', phrase_en:'The foot is cold.' },
+  { emoji:'🦷', en:'tooth', no:'tann', art:'en', cat:'body', phrase:'Tannen er hvit.', phrase_en:'The tooth is white.' },
+  { emoji:'💪', en:'arm', no:'arm', art:'en', cat:'body', phrase:'Armen er sterk.', phrase_en:'The arm is strong.' },
+  { emoji:'🧠', en:'brain', no:'hjerne', art:'en', cat:'body', phrase:'Hjernen tenker.', phrase_en:'The brain thinks.' },
+  { emoji:'❤️', en:'heart', no:'hjerte', art:'et', cat:'body', phrase:'Hjertet er sterkt.', phrase_en:'The heart is strong.' },
+
+  // WEATHER
+  { emoji:'☀️', en:'sun', no:'sol', art:'ei', cat:'weather', phrase:'Solen skinner.', phrase_en:'The sun is shining.' },
+  { emoji:'🌧️', en:'rain', no:'regn', art:'et', cat:'weather', phrase:'Det regner.', phrase_en:'It is raining.' },
+  { emoji:'❄️', en:'snow', no:'snø', art:'en', cat:'weather', phrase:'Det snør.', phrase_en:'It is snowing.' },
+  { emoji:'💨', en:'wind', no:'vind', art:'en', cat:'weather', phrase:'Vinden blåser.', phrase_en:'The wind is blowing.' },
+  { emoji:'⛅', en:'cloud', no:'sky', art:'en', cat:'weather', phrase:'Skyen er grå.', phrase_en:'The cloud is grey.' },
+  { emoji:'⛈️', en:'storm', no:'storm', art:'en', cat:'weather', phrase:'Stormen er sterk.', phrase_en:'The storm is strong.' },
+  { emoji:'🌈', en:'rainbow', no:'regnbue', art:'en', cat:'weather', phrase:'Regnbuen er vakker.', phrase_en:'The rainbow is beautiful.' },
+  { emoji:'🌡️', en:'temperature', no:'temperatur', art:'en', cat:'weather', phrase:'Det er kaldt.', phrase_en:'It is cold.' },
+  { emoji:'🌊', en:'wave', no:'bølge', art:'ei', cat:'weather', phrase:'Bølgen er stor.', phrase_en:'The wave is big.' },
+  { emoji:'⚡', en:'lightning', no:'lyn', art:'et', cat:'weather', phrase:'Lynet slår ned.', phrase_en:'Lightning strikes.' },
+
+  // TRANSPORT
+  { emoji:'🚗', en:'car', no:'bil', art:'en', cat:'transport', phrase:'Bilen er rød.', phrase_en:'The car is red.' },
+  { emoji:'🚂', en:'train', no:'tog', art:'et', cat:'transport', phrase:'Toget er raskt.', phrase_en:'The train is fast.' },
+  { emoji:'✈️', en:'plane', no:'fly', art:'et', cat:'transport', phrase:'Flyet er høyt.', phrase_en:'The plane is high.' },
+  { emoji:'🚢', en:'boat', no:'båt', art:'en', cat:'transport', phrase:'Båten er stor.', phrase_en:'The boat is big.' },
+  { emoji:'🚲', en:'bike', no:'sykkel', art:'en', cat:'transport', phrase:'Sykkelen er ny.', phrase_en:'The bike is new.' },
+  { emoji:'🚌', en:'bus', no:'buss', art:'en', cat:'transport', phrase:'Bussen er sen.', phrase_en:'The bus is late.' },
+  { emoji:'🏍️', en:'motorcycle', no:'motorsykkel', art:'en', cat:'transport', phrase:'Motorsykkelen er rask.', phrase_en:'The motorcycle is fast.' },
+  { emoji:'🚁', en:'helicopter', no:'helikopter', art:'et', cat:'transport', phrase:'Helikopteret flyr lavt.', phrase_en:'The helicopter flies low.' },
+  { emoji:'⛵', en:'sailboat', no:'seilbåt', art:'en', cat:'transport', phrase:'Seilbåten er vakker.', phrase_en:'The sailboat is beautiful.' },
+  { emoji:'🚶', en:'walk', no:'gå', art:'', cat:'transport', phrase:'Jeg går til butikken.', phrase_en:'I walk to the shop.' },
+
+  // EMOTIONS
+  { emoji:'😊', en:'happy', no:'glad', art:'', cat:'emotions', phrase:'Jeg er glad!', phrase_en:'I am happy!' },
+  { emoji:'😢', en:'sad', no:'trist', art:'', cat:'emotions', phrase:'Jeg er trist.', phrase_en:'I am sad.' },
+  { emoji:'😡', en:'angry', no:'sint', art:'', cat:'emotions', phrase:'Jeg er sint.', phrase_en:'I am angry.' },
+  { emoji:'😨', en:'scared', no:'redd', art:'', cat:'emotions', phrase:'Jeg er redd.', phrase_en:'I am scared.' },
+  { emoji:'😴', en:'sleepy', no:'trøtt', art:'', cat:'emotions', phrase:'Jeg er trøtt.', phrase_en:'I am sleepy.' },
+  { emoji:'🤩', en:'excited', no:'begeistret', art:'', cat:'emotions', phrase:'Jeg er begeistret!', phrase_en:'I am excited!' },
+  { emoji:'😍', en:'in love', no:'forelsket', art:'', cat:'emotions', phrase:'Jeg er forelsket.', phrase_en:'I am in love.' },
+  { emoji:'😆', en:'laughing', no:'ler', art:'', cat:'emotions', phrase:'Jeg ler mye.', phrase_en:'I am laughing a lot.' },
+  { emoji:'🥰', en:'warm/loved', no:'varm', art:'', cat:'emotions', phrase:'Jeg føler meg varm.', phrase_en:'I feel warm.' },
+  { emoji:'😎', en:'cool', no:'kul', art:'', cat:'emotions', phrase:'Det er kult!', phrase_en:'That is cool!' },
+
+  // ACTIONS
+  { emoji:'🏃', en:'run', no:'løper', art:'', cat:'actions', phrase:'Han løper fort.', phrase_en:'He runs fast.' },
+  { emoji:'🍽️', en:'eat', no:'spiser', art:'', cat:'actions', phrase:'Hun spiser middag.', phrase_en:'She is eating dinner.' },
+  { emoji:'💤', en:'sleep', no:'sover', art:'', cat:'actions', phrase:'Barnet sover.', phrase_en:'The child is sleeping.' },
+  { emoji:'📚', en:'read', no:'leser', art:'', cat:'actions', phrase:'Jeg leser en bok.', phrase_en:'I am reading a book.' },
+  { emoji:'✍️', en:'write', no:'skriver', art:'', cat:'actions', phrase:'Hun skriver brev.', phrase_en:'She is writing a letter.' },
+  { emoji:'🎵', en:'sing', no:'synger', art:'', cat:'actions', phrase:'Vi synger sammen.', phrase_en:'We are singing together.' },
+  { emoji:'💃', en:'dance', no:'danser', art:'', cat:'actions', phrase:'Hun danser bra.', phrase_en:'She dances well.' },
+  { emoji:'🧹', en:'clean', no:'rydder', art:'', cat:'actions', phrase:'Jeg rydder huset.', phrase_en:'I am cleaning the house.' },
+  { emoji:'🛒', en:'buy', no:'kjøper', art:'', cat:'actions', phrase:'Han kjøper mat.', phrase_en:'He is buying food.' },
+  { emoji:'🗣️', en:'speak', no:'snakker', art:'', cat:'actions', phrase:'Vi snakker norsk.', phrase_en:'We speak Norwegian.' },
+];
+
+const SENTENCES = [
+  { clue: '🐶🏃', en: 'The dog is running.', no: 'Hunden løper.', tiles: ['Hunden','løper','sover','spiser','Katten'], answer: ['Hunden','løper'] },
+  { clue: '👩☕', en: 'Mom drinks coffee.', no: 'Mor drikker kaffe.', tiles: ['Mor','drikker','kaffe','spiser','Far'], answer: ['Mor','drikker','kaffe'] },
+  { clue: '☀️😊', en: 'The sun is shining.', no: 'Solen skinner.', tiles: ['Solen','skinner','regner','Vinden','blåser'], answer: ['Solen','skinner'] },
+  { clue: '🐱💤', en: 'The cat is sleeping.', no: 'Katten sover.', tiles: ['Katten','sover','løper','Hunden','spiser'], answer: ['Katten','sover'] },
+  { clue: '👦📚', en: 'The boy reads a book.', no: 'Gutten leser en bok.', tiles: ['Gutten','leser','en','bok','skriver','et'], answer: ['Gutten','leser','en','bok'] },
+  { clue: '🚗💨', en: 'The car drives fast.', no: 'Bilen kjører fort.', tiles: ['Bilen','kjører','fort','sakte','Toget'], answer: ['Bilen','kjører','fort'] },
+  { clue: '❄️🌨️', en: 'It is snowing.', no: 'Det snør.', tiles: ['Det','snør','regner','blåser','er'], answer: ['Det','snør'] },
+  { clue: '👵🍰', en: 'Grandmother bakes cake.', no: 'Bestemor baker kake.', tiles: ['Bestemor','baker','kake','kaffe','lager'], answer: ['Bestemor','baker','kake'] },
+  { clue: '👨🎵', en: 'Dad is singing.', no: 'Far synger.', tiles: ['Far','synger','danser','Mor','ler'], answer: ['Far','synger'] },
+  { clue: '🌈😍', en: 'The rainbow is beautiful.', no: 'Regnbuen er vakker.', tiles: ['Regnbuen','er','vakker','stor','Solen'], answer: ['Regnbuen','er','vakker'] },
+];
+
+const CATEGORIES = [
+  { id: 'animals',   label: 'Animals',   emoji: '🐾' },
+  { id: 'food',      label: 'Food',      emoji: '🍽️' },
+  { id: 'home',      label: 'Home',      emoji: '🏠' },
+  { id: 'family',    label: 'Family',    emoji: '👨‍👩‍👧' },
+  { id: 'body',      label: 'Body',      emoji: '🫀' },
+  { id: 'weather',   label: 'Weather',   emoji: '🌤️' },
+  { id: 'transport', label: 'Transport', emoji: '🚗' },
+  { id: 'emotions',  label: 'Emotions',  emoji: '😊' },
+  { id: 'actions',   label: 'Actions',   emoji: '🏃' },
+];
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let G = {
+  mode: null,
+  cat: null,           // null = all
+  questions: [],
+  current: 0,
+  correct: 0,
+  wrong: 0,
+  streak: 0,
+  totalStreak: 0,
+  // match state
+  matchSelected: null,
+  matchPairs: [],
+  matchMatched: 0,
+  // sentence state
+  sentenceTiles: [],
+  sentenceDrop: [],
+};
+
+// ══════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════
+const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+const pick = (arr, n) => shuffle(arr).slice(0, n);
+const $ = id => document.getElementById(id);
+
+function show(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(screenId).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════════════════
+function initHome() {
+  const chips = $('catChips');
+  chips.innerHTML = `<div class="cat-chip active" data-cat="" onclick="selectCat(this,'')">
+    <span class="cat-chip-emoji">✨</span> All Topics
+  </div>` + CATEGORIES.map(c =>
+    `<div class="cat-chip" data-cat="${c.id}" onclick="selectCat(this,'${c.id}')">
+      <span class="cat-chip-emoji">${c.emoji}</span> ${c.label}
+    </div>`
+  ).join('');
+}
+
+function selectCat(el, cat) {
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  G.cat = cat || null;
+}
+
+function goHome() { show('screenHome'); }
+
+// ══════════════════════════════════════════════════════
+// START MODE
+// ══════════════════════════════════════════════════════
+function startMode(mode) {
+  G.mode = mode;
+  G.current = 0;
+  G.correct = 0;
+  G.wrong = 0;
+  $('scoreCorrect').textContent = '0';
+  $('scoreWrong').textContent = '0';
+
+  const pool = G.cat ? VOCAB.filter(v => v.cat === G.cat) : VOCAB;
+
+  if (mode === 'sentence') {
+    G.questions = shuffle(SENTENCES).slice(0, 6);
+  } else if (mode === 'match') {
+    G.questions = [{ type: 'match', pool: pick(pool, 8) }];
+  } else {
+    G.questions = pick(pool, 10).map(v => ({
+      type: mode,
+      item: v,
+      options: buildOptions(v, pool, mode),
+    }));
+  }
+
+  show('screenGame');
+  renderQuestion();
+}
+
+function buildOptions(correct, pool, mode) {
+  const wrong = shuffle(pool.filter(v => v.no !== correct.no)).slice(0, 3);
+  return shuffle([correct, ...wrong]);
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER QUESTION
+// ══════════════════════════════════════════════════════
+function updateProgress() {
+  const total = G.questions.length;
+  const pct = G.questions.length > 0 ? (G.current / total) * 100 : 0;
+  $('progressFill').style.width = pct + '%';
+  $('progressLabel').textContent = G.current + ' / ' + total;
+}
+
+function renderQuestion() {
+  updateProgress();
+  const q = G.questions[G.current];
+  if (!q) { showResults(); return; }
+
+  if (q.type === 'match') renderMatch(q);
+  else if (q.type === 'sentence') renderSentence(q);
+  else if (q.type === 'emojiToWord') renderEmojiToWord(q);
+  else if (q.type === 'wordToEmoji') renderWordToEmoji(q);
+}
+
+// ── EMOJI → WORD ──
+function renderEmojiToWord(q) {
+  const area = $('gameArea');
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-mode-label">What is this in Norwegian?</div>
+      <div class="q-emoji">${q.item.emoji}</div>
+      <div class="q-sub">${q.item.en}</div>
+    </div>
+    <div class="options-grid cols-2" id="optGrid">
+      ${q.options.map(o => `
+        <button class="opt-btn" onclick="answerQuiz('${o.no}','${q.item.no}',this)">
+          <span class="opt-text">${o.no}</span>
+          ${o.art ? `<span class="q-article">${o.art}</span>` : ''}
+        </button>`).join('')}
+    </div>
+    <div class="feedback-panel" id="fbPanel"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>`;
+}
+
+// ── WORD → EMOJI ──
+function renderWordToEmoji(q) {
+  const area = $('gameArea');
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-mode-label">Pick the matching emoji</div>
+      <div class="q-word">${q.item.no}</div>
+      ${q.item.art ? `<div class="q-article">${q.item.art} ${q.item.no}</div>` : ''}
+      <div class="q-sub">${q.item.cat}</div>
+    </div>
+    <div class="options-grid cols-2" id="optGrid">
+      ${q.options.map(o => `
+        <button class="opt-btn" onclick="answerQuiz('${o.no}','${q.item.no}',this)">
+          <span class="opt-emoji">${o.emoji}</span>
+          <span class="opt-sub">${o.en}</span>
+        </button>`).join('')}
+    </div>
+    <div class="feedback-panel" id="fbPanel"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>`;
+}
+
+function answerQuiz(chosen, correct, btn) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  const isOk = chosen === correct;
+
+  if (isOk) {
+    btn.classList.add('correct');
+    G.correct++;
+    G.streak++;
+    G.totalStreak = Math.max(G.totalStreak, G.streak);
+    showFeedback(true, correct);
+  } else {
+    btn.classList.add('wrong');
+    G.wrong++;
+    G.streak = 0;
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.querySelector('.opt-text')?.textContent === correct ||
+          b.querySelector('.opt-sub')?.textContent) {
+        // find correct option visually
+      }
+    });
+    showFeedback(false, correct);
+  }
+
+  $('scoreCorrect').textContent = G.correct;
+  $('scoreWrong').textContent = G.wrong;
+  $('streakCount').textContent = G.streak;
+  const nb = $('nextBtn'); if(nb) nb.classList.add('show');
+}
+
+function showFeedback(isOk, correctNo) {
+  const item = VOCAB.find(v => v.no === correctNo);
+  const panel = $('fbPanel');
+  if (!panel || !item) return;
+  panel.className = `feedback-panel show ${isOk ? 'correct-fb' : 'wrong-fb'}`;
+  panel.innerHTML = `
+    <span class="fb-icon">${isOk ? '✅' : '❌'}</span>
+    <div class="fb-body">
+      <div class="fb-title ${isOk ? 'correct-fb' : 'wrong-fb'}">${isOk ? 'Correct! 🎉' : 'Not quite…'}</div>
+      <div class="fb-detail">${item.emoji} ${item.no} = ${item.en}</div>
+      ${item.phrase ? `<div class="fb-example">${item.phrase} — ${item.phrase_en}</div>` : ''}
+    </div>`;
+}
+
+// ── MATCH ──
+function renderMatch(q) {
+  const pool = q.pool.slice(0, 6);
+  const area = $('gameArea');
+
+  const leftItems = shuffle(pool).map((v, i) => ({ id: 'L'+i, pairId: v.no, display: v.emoji, type: 'emoji' }));
+  const rightItems = shuffle(pool).map((v, i) => ({ id: 'R'+i, pairId: v.no, display: v.no, type: 'word' }));
+  G.matchPairs = pool;
+  G.matchSelected = null;
+  G.matchMatched = 0;
+
+  area.innerHTML = `
+    <div class="match-intro">Match each emoji to its Norwegian word — tap one from each side</div>
+    <div class="match-board">
+      <div id="matchLeft">${leftItems.map(it =>
+        `<div class="match-card" id="${it.id}" data-pair="${it.pairId}" data-side="left" onclick="matchTap('${it.id}','${it.pairId}','left')">
+          <span class="mc-emoji">${it.display}</span>
+        </div>`).join('')}</div>
+      <div id="matchRight">${rightItems.map(it =>
+        `<div class="match-card" id="${it.id}" data-pair="${it.pairId}" data-side="right" onclick="matchTap('${it.id}','${it.pairId}','right')">
+          ${it.display}
+        </div>`).join('')}</div>
+    </div>
+    <div class="feedback-panel" id="fbPanel"></div>`;
+}
+
+let matchSel = { id: null, pair: null, side: null };
+
+function matchTap(id, pair, side) {
+  const card = $(id);
+  if (card.classList.contains('matched') || card.classList.contains('disabled')) return;
+
+  // Deselect same-side previous
+  if (matchSel.id && matchSel.side === side) {
+    const prev = $(matchSel.id);
+    if (prev) prev.classList.remove('selected');
+  }
+
+  // If tapping opposite side and we have a selection
+  if (matchSel.id && matchSel.side !== side) {
+    const isMatch = matchSel.pair === pair;
+    if (isMatch) {
+      $(matchSel.id).classList.add('matched');
+      card.classList.add('matched');
+      G.matchMatched++;
+      G.correct++;
+      G.streak++;
+      $('scoreCorrect').textContent = G.correct;
+      $('streakCount').textContent = G.streak;
+      matchSel = { id: null, pair: null, side: null };
+
+      if (G.matchMatched >= G.matchPairs.slice(0,6).length) {
+        setTimeout(() => {
+          showMatchFeedback(true);
+          nextQuestion();
+        }, 600);
+      }
+    } else {
+      const prevCard = $(matchSel.id);
+      prevCard.classList.add('wrong-flash');
+      card.classList.add('wrong-flash');
+      G.wrong++;
+      G.streak = 0;
+      $('scoreWrong').textContent = G.wrong;
+      $('streakCount').textContent = G.streak;
+      setTimeout(() => {
+        prevCard.classList.remove('wrong-flash','selected');
+        card.classList.remove('wrong-flash','selected');
+      }, 500);
+      matchSel = { id: null, pair: null, side: null };
+    }
+    return;
+  }
+
+  // Select this card
+  card.classList.add('selected');
+  matchSel = { id, pair, side };
+}
+
+function showMatchFeedback(ok) {
+  const panel = $('fbPanel');
+  if (!panel) return;
+  panel.className = 'feedback-panel show correct-fb';
+  panel.innerHTML = `<span class="fb-icon">🎉</span><div class="fb-body"><div class="fb-title correct-fb">All matched! Well done!</div></div>`;
+}
+
+// ── SENTENCE BUILDER ──
+function renderSentence(q) {
+  G.sentenceTiles = shuffle(q.tiles);
+  G.sentenceDrop = [];
+
+  const area = $('gameArea');
+  area.innerHTML = `
+    <div class="sentence-clue">
+      <div class="clue-label">Build the sentence for this clue</div>
+      <div class="clue-emojis">${q.clue}</div>
+      <div class="clue-hint">${q.en}</div>
+    </div>
+    <div class="sentence-drop" id="sentDrop">
+      <span class="drop-placeholder">Tap words below to build the sentence…</span>
+    </div>
+    <div class="tile-pool" id="tilePool">
+      ${G.sentenceTiles.map((t, i) =>
+        `<div class="word-tile" id="tile_${i}" onclick="tileTap(${i},'${t}')">${t}</div>`
+      ).join('')}
+    </div>
+    <button class="check-btn" id="checkBtn" onclick="checkSentence('${q.answer.join(' ')}','${q.no}')" disabled>Check Answer</button>
+    <div class="feedback-panel" id="fbPanel"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>`;
+}
+
+function tileTap(idx, word) {
+  const tile = $('tile_' + idx);
+  if (!tile) return;
+
+  if (tile.classList.contains('in-drop')) {
+    // Remove from drop
+    G.sentenceDrop = G.sentenceDrop.filter(t => t.idx !== idx);
+    tile.classList.remove('in-drop');
+  } else {
+    // Add to drop
+    G.sentenceDrop.push({ idx, word });
+    tile.classList.add('in-drop');
+  }
+  updateDropZone();
+}
+
+function updateDropZone() {
+  const drop = $('sentDrop');
+  const checkBtn = $('checkBtn');
+  if (G.sentenceDrop.length === 0) {
+    drop.innerHTML = '<span class="drop-placeholder">Tap words below to build the sentence…</span>';
+    drop.classList.remove('has-words');
+    if (checkBtn) checkBtn.disabled = true;
+  } else {
+    drop.classList.add('has-words');
+    drop.innerHTML = G.sentenceDrop.map(t =>
+      `<div class="word-tile in-drop" onclick="tileTap(${t.idx},'${t.word}')">${t.word}</div>`
+    ).join('');
+    if (checkBtn) checkBtn.disabled = false;
+  }
+}
+
+function checkSentence(correctStr, correctNo) {
+  const built = G.sentenceDrop.map(t => t.word).join(' ');
+  const isOk = built.trim().toLowerCase() === correctStr.trim().toLowerCase();
+
+  document.querySelectorAll('.word-tile').forEach(t => {
+    t.onclick = null;
+    if (t.classList.contains('in-drop')) {
+      t.classList.add(isOk ? 'correct-tile' : 'wrong-tile');
+    }
+  });
+
+  const checkBtn = $('checkBtn');
+  if (checkBtn) checkBtn.disabled = true;
+
+  if (isOk) { G.correct++; G.streak++; }
+  else { G.wrong++; G.streak = 0; }
+  $('scoreCorrect').textContent = G.correct;
+  $('scoreWrong').textContent = G.wrong;
+  $('streakCount').textContent = G.streak;
+
+  const panel = $('fbPanel');
+  if (panel) {
+    panel.className = `feedback-panel show ${isOk ? 'correct-fb' : 'wrong-fb'}`;
+    panel.innerHTML = `
+      <span class="fb-icon">${isOk ? '✅' : '❌'}</span>
+      <div class="fb-body">
+        <div class="fb-title ${isOk ? 'correct-fb' : 'wrong-fb'}">${isOk ? 'Perfect sentence! 🎉' : 'Almost — here\'s the answer:'}</div>
+        <div class="fb-detail">${correctNo}</div>
+        <div class="fb-example">${isOk ? 'Great work!' : 'Try reading it out loud.'}</div>
+      </div>`;
+  }
+  const nb = $('nextBtn'); if(nb) nb.classList.add('show');
+}
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════
+function nextQuestion() {
+  G.current++;
+  if (G.current >= G.questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    updateProgress();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// RESULTS
+// ══════════════════════════════════════════════════════
+function showResults() {
+  updateProgress();
+  const total = G.correct + G.wrong;
+  const pct = total > 0 ? Math.round((G.correct / total) * 100) : 0;
+  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '⭐' : pct >= 50 ? '📚' : '💪';
+  const title = pct >= 90 ? 'Brilliant!' : pct >= 70 ? 'Well done!' : pct >= 50 ? 'Keep going!' : 'Good try!';
+  const sub = pct >= 90 ? 'You\'re getting the hang of Norwegian!' : pct >= 70 ? 'You\'re building a great foundation.' : pct >= 50 ? 'Every practice session counts.' : 'Norwegian takes time — you\'re doing great.';
+
+  $('resultsCard').innerHTML = `
+    <span class="result-emoji">${emoji}</span>
+    <div class="result-title">${title}</div>
+    <div class="result-sub">${sub}</div>
+    <div class="result-stats">
+      <div class="stat-box">
+        <div class="stat-num">${G.correct}</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">${pct}%</div>
+        <div class="stat-label">Score</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">${G.wrong}</div>
+        <div class="stat-label">Wrong</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">${G.totalStreak}</div>
+        <div class="stat-label">Best Streak</div>
+      </div>
+    </div>
+    <div class="action-btns">
+      <button class="primary-btn" onclick="startMode('${G.mode}')">Play Again</button>
+      <button class="secondary-btn" onclick="goHome()">Choose Another Mode</button>
+    </div>`;
+  show('screenResults');
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+initHome();
+</script>
+</body>
+</html>
